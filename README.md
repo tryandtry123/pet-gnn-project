@@ -241,10 +241,8 @@ print(response.json())
 
 ## 📞 联系方式
 
-- 📧 Email: [project@example.com](mailto:project@example.com)
-- 🐛 Issues: [GitHub Issues](https://github.com/your-repo/issues)
-- 💬 讨论: [GitHub Discussions](https://github.com/your-repo/discussions)
-
+- 📧 Email: 1249315711@qq.com
+- 
 ---
 
 <div align="center">
