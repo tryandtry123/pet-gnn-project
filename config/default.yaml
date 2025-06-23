@@ -1,0 +1,129 @@
+# ===== PET-GNN 项目配置文件 =====
+
+# 数据相关配置
+data:
+  raw_data_path: "data/raw"
+  processed_data_path: "data/processed"
+  graph_data_path: "data/graphs"
+  
+  # PET事件特征
+  event_features:
+    - "pos_i"      # 探测器i的空间坐标
+    - "pos_j"      # 探测器j的空间坐标
+    - "energy_i"   # 探测器i的能量
+    - "energy_j"   # 探测器j的能量
+    - "time_i"     # 探测器i的时间戳
+    - "time_j"     # 探测器j的时间戳
+  
+  # 数据处理参数
+  preprocessing:
+    normalize: true
+    train_split: 0.7
+    val_split: 0.15
+    test_split: 0.15
+    random_seed: 42
+
+# 图构建配置
+graph:
+  # 图构建参数
+  k_neighbors: 8              # k-近邻数量
+  distance_threshold: 10.0    # 距离阈值
+  coupling_threshold: 0.1     # 耦合强度阈值
+  
+  # 节点特征
+  node_features:
+    - "coordinates"    # 空间坐标
+    - "crystal_size"   # 晶体尺寸
+    - "array_index"    # 阵列索引
+    - "compute_power"  # 计算能力
+  
+  # 边特征
+  edge_features:
+    - "distance"       # 欧几里得距离
+    - "coupling"       # 功能耦合强度
+
+# 模型配置
+model:
+  # GNN架构参数
+  hidden_dim: 128
+  num_layers: 3
+  dropout: 0.2
+  
+  # 图卷积层配置
+  conv_type: "GCN"    # GCN, GAT, GraphSAGE
+  residual: true      # 是否使用残差连接
+  batch_norm: true    # 是否使用批归一化
+  
+  # 注意力机制
+  attention:
+    heads: 4          # 注意力头数
+    concat: true      # 是否连接多头输出
+  
+  # 输出层
+  output_dim: 2       # 二分类
+  activation: "relu"
+
+# 训练配置
+training:
+  # 训练参数
+  batch_size: 64
+  learning_rate: 0.001
+  weight_decay: 0.0005
+  epochs: 100
+  
+  # 优化器
+  optimizer: "Adam"   # Adam, SGD, AdamW
+  scheduler: "StepLR" # StepLR, CosineAnnealingLR
+  step_size: 30
+  gamma: 0.1
+  
+  # 损失函数
+  loss_function: "CrossEntropyLoss"  # CrossEntropyLoss, FocalLoss
+  class_weights: [1.0, 2.0]  # 处理类别不平衡
+  
+  # 早停机制
+  early_stopping:
+    patience: 10
+    min_delta: 0.001
+  
+  # 验证频率
+  val_frequency: 5    # 每5个epoch验证一次
+
+# 评估配置
+evaluation:
+  metrics:
+    - "accuracy"
+    - "precision" 
+    - "recall"
+    - "f1_score"
+    - "auc_roc"
+  
+  # 可视化
+  plot_confusion_matrix: true
+  plot_roc_curve: true
+  plot_training_curves: true
+
+# 实验配置
+experiment:
+  name: "pet_gnn_baseline"
+  save_dir: "experiments"
+  log_frequency: 10
+  save_frequency: 20
+  
+  # 日志和监控
+  use_tensorboard: true
+  use_wandb: false
+  wandb_project: "pet-gnn"
+
+# 硬件配置
+hardware:
+  device: "auto"      # auto, cpu, cuda
+  num_workers: 4      # 数据加载进程数
+  pin_memory: true    # 是否使用pin_memory
+
+# 可视化配置
+visualization:
+  graph_layout: "spring"  # spring, circular, random
+  node_size: 50
+  edge_width: 1.0
+  save_format: "png"      # png, pdf, svg 
